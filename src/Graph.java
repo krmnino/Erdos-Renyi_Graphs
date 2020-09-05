@@ -45,44 +45,41 @@ public class Graph {
 	//Number t is just a threshold, if a path length is equal or larger than t, then return 1 immediately.
 	//Else, just continue looping until we find something or return 0 if we explore through available node.
 	public int largest_connected_bfs(int t) {
-		int height;
+		int max_height;
 		//Treat each node in graph G as a root.
 		for(int i = 0; i < this.adj_matrix.length; i++) {
-			Queue<Integer> queue = new LinkedList<>();
+			Queue<Integer[]> queue = new LinkedList<>();
 			Set<Integer> visited = new HashSet<>();
-			queue.add(i);
+			Integer[] start_node = {i, 0};
+			queue.add(start_node);
 			visited.add(i);
-			height = 0;
-			boolean pushed = false;
+			max_height = 0;
 			//Start BFS algorithm here, while the node queue is not empty
 			while(!queue.isEmpty()) {
 				//Dequeue node (index) and make it current node
-				int curr_node = queue.remove();
+				Integer[] curr_node = queue.remove();
+				if(max_height < curr_node[1]) {
+					max_height = curr_node[1];
+				}
 				//Loop through adjacency matrix row at index [node]
 				for(int j = 0; j < this.adj_matrix.length; j++) {
 					//If the current entry in row is equal to 1 and is was not visited before...
-					if(this.adj_matrix[curr_node][j] == 1 && !visited.contains(j)) {
+					if(this.adj_matrix[curr_node[0]][j] == 1 && !visited.contains(j)) {
 						//Add it to the queue and mark it as visited.
-						//Also, set the "pushed" flag to true meaning that there is another layer in graph to visit later on!
-						queue.add(j);
+						//Each enqueued element is pushed with the node's depth value
+						if(curr_node[1] + 1 >= t) {
+							return 1;
+						}
+						Integer[] next_node = {j, curr_node[1] + 1};
+						queue.add(next_node);
 						visited.add(j);
-						pushed = true;
 					}
 				}
-				//Use the previous "pushed" flag to count layers. If it was set to true, then increase height counter
-				if(pushed) {
-					height++;
-					//If the height is larger than t, then return 1
-					if (height >= t) { 
-						return 1; 
-					}
-					//Reset "pushed" flag back to false
-					pushed = false;
-				}
+				
 			}
 			//Print this line after looping through one row in the adjacency matrix just to show the path length from a given node.
 			//Comment it if it is annoying.
-			System.out.println("Longest possible path from Node [" + i + "]: " + height);
+			System.out.println("Longest possible path from Node [" + i + "]: " + max_height);
 		}
 		return 0;
 	}
