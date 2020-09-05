@@ -81,6 +81,7 @@ public class Graph {
 				}
 			}
 			//Print this line after looping through one row in the adjacency matrix just to show the path length from a given node.
+			//Comment it if it is annoying.
 			System.out.println("Longest possible path from Node [" + i + "]: " + height);
 		}
 		return 0;
