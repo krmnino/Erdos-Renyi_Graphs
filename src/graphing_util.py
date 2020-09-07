@@ -12,14 +12,13 @@ def parse_file(path):
         if(line == '\n'):
             break
         temp = line.split(',')
-        c_val = np.append(size, int(line.split(',')[0]))
-        percent = np.append(swaps, int(line.split(',')[1]))   
-    os.remove(path)
+        c_val = np.append(c_val, float(line.split(',')[0]))
+        percent = np.append(percent, float(line.split(',')[1]))   
     return (c_val, percent)
 
 def plot_graph(c_val, percent):
-    plt.clf()
-    plt.plot(c_val, percent,'ko', size, swaps, 'b')
+    plt.figure(figsize=(12,8))
+    plt.plot(c_val, percent,'ko', c_val, percent, 'b')
     plt.title('C value vs Percent of Graphs with t or more connected nodes')
     plt.xlabel('C value')
     plt.ylabel('Percent')
@@ -27,7 +26,6 @@ def plot_graph(c_val, percent):
     plt.show()
 
 warnings.filterwarnings('ignore')
-sort_algo = sys.argv[1]
-path = sys.argv[2]
+path = sys.argv[1]
 data = parse_file(path)
-plot_grapgh(data[0], data[1])
+plot_graph(data[0], data[1])
