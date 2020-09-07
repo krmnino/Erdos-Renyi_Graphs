@@ -36,9 +36,15 @@ public class Graph {
 		}
 	}
 	
+	//Recursive DFS algorithm
 	private void dfs(int curr_node, int[][] visited) {
+		//Set current node as visited
+		//NOTE: this won't truncate possible paths if two or more nodes at the same level are adjacent (edge between them)
+		//	which was the problem I found when I implemented BFS to solve this problem.
 		visited[curr_node][0] = 1;
+		//Loop through each possible adjacent node in the adjacency matrix
 		for(int i = 0; i < this.adj_matrix.length; i++) {
+			//If there is an adjacent node and hasn't been visited, then record its level and call dfs() again.
 			if(this.adj_matrix[curr_node][i] == 1 && visited[i][0] != 1) {
 				visited[i][1] = visited[curr_node][1] + 1;
 				dfs(i, visited);
