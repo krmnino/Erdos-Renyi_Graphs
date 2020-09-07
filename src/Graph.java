@@ -40,47 +40,41 @@ public class Graph {
 		}
 	}
 	
-	//Use BFS algorithm to explore the graph. 
-	//Loops through each node in the graph and treats it as a root to find the longest possible path.
-	//Number t is just a threshold, if a path length is equal or larger than t, then return 1 immediately.
-	//Else, just continue looping until we find something or return 0 if we explore through available node.
-	public int largest_connected_bfs(int t) {
-		int max_height;
-		//Treat each node in graph G as a root.
+	private void dfs(int curr_node, int[][] visited) {
+		visited[curr_node][0] = 1;
 		for(int i = 0; i < this.adj_matrix.length; i++) {
-			Queue<Integer[]> queue = new LinkedList<>();
-			Set<Integer> visited = new HashSet<>();
-			Integer[] start_node = {i, 0};
-			queue.add(start_node);
-			visited.add(i);
-			max_height = 0;
-			//Start BFS algorithm here, while the node queue is not empty
-			while(!queue.isEmpty()) {
-				//Dequeue node (index) and make it current node
-				Integer[] curr_node = queue.remove();
-				if(max_height < curr_node[1]) {
-					max_height = curr_node[1];
+			if(this.adj_matrix[curr_node][i] == 1 && visited[i][0] != 1) {
+				visited[i][1] = visited[curr_node][1] + 1;
+				dfs(i, visited);
+			}
+		}
+	}
+	
+	//Function wrapper for DFS function. Takes threshold (integer) as parameter for minimum path length
+	//Returns 1 if threshold is surpassed, else return 0.
+	public int largest_connected_dfs(int t) {
+		int longest_path = 0;
+		//Needs to loop through all existing nodes in graph and treat them as starting points
+		for(int i = 0; i < this.adj_matrix.length; i++) {
+			//Create a new visited 2D array to store visit history and level data
+			int[][] visited = new int[this.adj_matrix.length][2];
+			//Call recursive DFS function
+			dfs(i, visited);
+			//Compares longest path recorded with the visited level array
+			//If there is a datapoint equal or greater than threshold, return 1, else just update the longest path record
+			for(int j = 0; j < visited.length; j++) {
+				if(visited[j][1] > longest_path) {
+					longest_path = visited[j][1];
 				}
-				//Loop through adjacency matrix row at index [node]
-				for(int j = 0; j < this.adj_matrix.length; j++) {
-					//If the current entry in row is equal to 1 and is was not visited before...
-					if(this.adj_matrix[curr_node[0]][j] == 1 && !visited.contains(j)) {
-						//Add it to the queue and mark it as visited.
-						//Each enqueued element is pushed with the node's depth value
-						if(curr_node[1] + 1 >= t) {
-							return 1;
-						}
-						Integer[] next_node = {j, curr_node[1] + 1};
-						queue.add(next_node);
-						visited.add(j);
-					}
+				if(longest_path >= t) {
+					return 1;
 				}
-				
 			}
 			//Print this line after looping through one row in the adjacency matrix just to show the path length from a given node.
 			//Comment it if it is annoying.
-			System.out.println("Longest possible path from Node [" + i + "]: " + max_height);
+			//System.out.println("Longest possible path from Node [" + i + "]: " + longest_path);
 		}
+		//After traversing the whole graph, if the threshold was not met then just return 0.
 		return 0;
 	}
 	
