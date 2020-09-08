@@ -23,8 +23,6 @@ public class Main {
 		Graph test = new Graph(adj_mtrx1);
 	    System.out.println(test.largest_connected_dfs(5));
 		*/
-		
-		
 		int n = 40;
 		double p;
 		double[] c = {0.2, 0.4, 0.6, 0.8, 1.0, 1.2,	1.4, 1.6, 1.8, 2.0, 2.2, 2.4, 2.6, 2.8, 3.0};
@@ -39,7 +37,7 @@ public class Main {
 			for(int j = 0; j < 500; j++) {
 				Graph g  = new Graph(n, p);
 				//If the graph meets the threshold, then increase by 1
-				if(g.largest_connected_dfs(30) == 1) {
+				if(g.largest_connected_component(30) == 1) {
 					threshold_met++;
 				}
 			}
