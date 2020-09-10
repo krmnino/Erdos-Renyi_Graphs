@@ -41,30 +41,36 @@ public class Graph {
 	}
 	
 	public int largest_connected_component(int t) {
-		//Treat each node in graph G as a root.
+		//Declare an array of boolean vars that records if a node was visited
+		boolean[] visited = new boolean[this.adj_matrix.length]; 
+		//For each existing node in the graph
 		for(int i = 0; i < this.adj_matrix.length; i++) {
-			int node_count = 0;
-			Queue<Integer> queue = new LinkedList<>();
-			boolean[] visited = new boolean[this.adj_matrix.length]; 
-			queue.add(i);
-			visited[i] = true;
-			//Start BFS algorithm here, while the node queue is not empty
-			while(!queue.isEmpty()) {
-				//Dequeue node (index) and make it current node
-				int curr_node = queue.remove();
-				//Loop through adjacency matrix row at index [node]
-				for(int j = 0; j < this.adj_matrix.length; j++) {
-					//If the current entry in row is equal to 1 and is was not visited before...
-					if(this.adj_matrix[curr_node][j] == 1 && !visited[j]) {
-						//Add it to the queue and mark it as visited.
-						//Each enqueued element is pushed with the node's depth value
-						queue.add(j);
-						visited[j] = true;
-						node_count++;
+			//If the node hasn't been visited, then visit it. This necessary
+			//	to prevent running BFS from a previously visited node in the
+			// 	that belongs to an explored connected component.
+			if(visited[i] == false) {
+				int node_count = 0;
+				Queue<Integer> queue = new LinkedList<>();
+				visited[i] = true;
+				queue.add(i);
+				//Start BFS algorithm here, while the node queue is not empty
+				while(!queue.isEmpty()) {
+					//Dequeue node (index) and make it current node
+					int curr_node = queue.remove();
+					//Loop through adjacency matrix row at index [node]
+					for(int j = 0; j < this.adj_matrix.length; j++) {
+						//If the current entry in row is equal to 1 and is was not visited before...
+						if(this.adj_matrix[curr_node][j] == 1 && !visited[j]) {
+							//Add it to the queue and mark it as visited.
+							//Each enqueued element is pushed with the node's depth value
+							queue.add(j);
+							visited[j] = true;
+							node_count++;
+						}
 					}
-				}
-				if(node_count >= t) {
-					return 1;
+					if(node_count >= t) {
+						return 1;
+					}
 				}
 			}
 		}
