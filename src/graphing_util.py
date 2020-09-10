@@ -19,7 +19,7 @@ def parse_file(path):
 def plot_graph(c_val, percent):
     plt.figure(figsize=(12,8))
     plt.plot(c_val, percent,'ko', c_val, percent, 'b')
-    plt.title('C value vs Percent of Graphs with t or more connected nodes')
+    plt.title('C value vs Percent of Graphs with Connected Components Greater than t')
     plt.xlabel('C value')
     plt.ylabel('Percent')
     plt.grid()
